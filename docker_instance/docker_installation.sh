@@ -3,9 +3,9 @@
 #1.install plugins
 sudo dnf -y install dnf-plugins-core
 #2.add repo
-sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo
+sudo dnf config-manager --add-repo https://download.docker.com/linux/rhel/docker-ce.repo -y
 #3. install docker engine
-sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo dnf install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
 
 #start and enable docker service
 sudo systemctl start docker
@@ -15,3 +15,12 @@ sudo systemctl enable docker
 # so the solution for this is we should add nrml user to docker group
 
 sudo usermod -aG docker ec2-user 
+
+#extending volume
+
+growpart /dev/nvme0n1 4
+lvextend -L +20G /dev/RootVG/rootVol
+lvextend -L +10G /dev/RootVG/varVol
+
+xfs_growfs /
+xfs_growfs /var
